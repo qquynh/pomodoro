@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #FFF;
+            font-family: Arial, sans-serif;
+        }
+
+        #pomodoroTimer {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(to bottom right, #007BFF, #0096FF);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        #timeLeft {
+            color: white;
+            font-size: 30px;
+            margin-bottom: 10px;
+        }
+
+        .timerButton {
+            margin-top: 5px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="pomodoroTimer">
+    <div id="timeLeft"></div>
+    <button id="pomodoroBtn" class="timerButton">Start Pomodoro (25 min)</button>
+    <button id="breakBtn" class="timerButton">Start Break (5 min)</button>
+</div>
+
+<script>
+    var timerID = null;
+    var minutes = 0;
+    var seconds = 0;
+
+    function updateTimer() {
+        document.getElementById('timeLeft').innerText = minutes + ":" + (seconds < 10 ? '0' + seconds : seconds);
+
+        seconds--;
+        if(seconds < 0) {
+            if(minutes == 0) {
+                alert('Timer complete!');
+                stopTimer();
+            } else {
+                seconds = 59;
+                minutes--;
+            }
+        }
+    }
+
+    function startTimer(timeMinutes) {
+        if(timerID) stopTimer(); // If a timer is already running, stop it
+
+        minutes = timeMinutes;
+        seconds = 0;
+
+        updateTimer();
+        timerID = setInterval(updateTimer, 1000);
+    }
+
+    function stopTimer() {
+        if(timerID) {
+            clearInterval(timerID);
+            timerID = null;
+        }
+    }
+
+    // Attach event listeners to buttons
+    document.getElementById('pomodoroBtn').addEventListener('click', function() { startTimer(25); });
+    document.getElementById('breakBtn').addEventListener('click', function() { startTimer(5); });
+</script>
+
+</body>
+</html>
